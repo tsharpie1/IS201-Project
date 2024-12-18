@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2px;
+            padding: 200px;
+            background-image: url(../Images/wordleback.jpg);
+            background-size: cover;
+           
+        }
+
+        .game-container {
+            max-width: 400px;
+        }
+
+        .guess-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .guess-cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid #ccc;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .guess-cell.green {
+            background-color: #6aaa64;
+            color: white;
+        }
+
+        .guess-cell.yellow {
+            background-color: #c9b458;
+            color: white;
+        }
+
+        .guess-cell.gray {
+            background-color: #787c7e;
+            color: white;
+        }
+
+        .controls {
+            margin-top: 10px;
+        }
+
+        .keyboard {
+            margin-top: 180px;
+            display: grid;
+            grid-template-columns: repeat(13, 1fr);
+            gap: 5px;
+        }
+
+        .keyboard-key {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ccc;
+            border-radius: 4px;
+            font-size: 24px;
+        }
+
+        .keyboard-key.green {
+            background-color: #6aaa64;
+            color: white;
+        }
+
+        .keyboard-key.yellow {
+            background-color: #c9b458;
+            color: white;
+        }
+
+        .keyboard-key.gray {
+            background-color: #787c7e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div id="game-board"></div>
+    <div class="controls">
+        <input type="text" id="guess-input" maxlength="5" placeholder="Enter 5 letters">
+        <button onclick="submitGuess()">Submit</button>
+        <button onclick="startNewGame()">New Game</button>
+        <button onclick="revealWord()">Give Up</button>
+    </div>
+</div>
+
+<div class="keyboard" id="keyboard"></div>
+
+<script>
+    const words = ["apple", "grape", "peach", "lemon", "berry", "mango", "melon", "chili", "olive", "plumb", "slate", "theme", "IS201"];
+    let secretWord = "";
+    let guesses = [];
+    const maxGuesses = 5;
+
+    function chooseRandomWord() {
+        return words[Math.floor(Math.random() * words.length)];
+    }
+
+    function startNewGame() {
+        secretWord = chooseRandomWord();
+        guesses = [];
+        document.getElementById('game-board').innerHTML = '';
+        document.getElementById('keyboard').innerHTML = '';
+        createBoard();
+        createKeyboard();
+    }
+
+    function createBoard() {
+        for (let i = 0; i < maxGuesses; i++) {
+            const row = document.createElement('div');
+            row.className = 'guess-row';
+            for (let j = 0; j < 5; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'guess-cell';
+                row.appendChild(cell);
+            }
+            document.getElementById('game-board').appendChild(row);
+        }
+    }
+
+    function createKeyboard() {
+        const letters = "abcdefghijklmnopqrstuvwxyz".split('');
+        letters.forEach(letter => {
+            const key = document.createElement('div');
+            key.className = 'keyboard-key';
+            key.id = `key-${letter}`;
+            key.innerText = letter;
+            document.getElementById('keyboard').appendChild(key);
+        });
+    }
+
+    function submitGuess() {
+        const input = document.getElementById('guess-input');
+        const guess = input.value.toLowerCase();
+        if (guess.length !== 5) {
+            alert('Please enter a 5-letter word.');
+            return;
+        }
+        if (guesses.length >= maxGuesses) {
+            alert('No more guesses allowed.');
+            return;
+        }
+
+        guesses.push(guess);
+        updateBoard();
+        updateKeyboard(guess);
+        input.value = '';
+
+        if (guess === secretWord) {
+            alert('Congratulations! You guessed the word!');
+            return;
+        }
+
+        if (guesses.length === maxGuesses) {
+            alert(`Out of guesses! The word was ${secretWord}`);
+        }
+    }
+
+    function updateBoard() {
+        const rows = document.querySelectorAll('.guess-row');
+        guesses.forEach((guess, guessIndex) => {
+            const row = rows[guessIndex];
+            const cells = row.querySelectorAll('.guess-cell');
+            for (let i = 0; i < 5; i++) {
+                cells[i].innerText = guess[i];
+                if (guess[i] === secretWord[i]) {
+                    cells[i].className = 'guess-cell green';
+                } else if (secretWord.includes(guess[i])) {
+                    cells[i].className = 'guess-cell yellow';
+                } else {
+                    cells[i].className = 'guess-cell gray';
+                }
+            }
+        });
+    }
+
+    function updateKeyboard(guess) {
+        guess.split('').forEach(letter => {
+            const key = document.getElementById(`key-${letter}`);
+            if (secretWord.includes(letter)) {
+                if (secretWord.indexOf(letter) === guess.indexOf(letter)) {
+                    key.className = 'keyboard-key green';
+                } else {
+                    key.className = 'keyboard-key yellow';
+                }
+            } else {
+                key.className = 'keyboard-key gray';
+            }
+        });
+    }
+
+    function revealWord() {
+        alert(`The word was: ${secretWord}`);
+    }
+
+    startNewGame();
+</script>
+
+</body>
+</html>

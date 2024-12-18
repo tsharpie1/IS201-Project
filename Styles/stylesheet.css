@@ -1,0 +1,61 @@
+.sbg {
+    /* background-image: url('../Images/F1background.png'); */
+    background-color: rgb(131, 131, 131);
+    background-position: top left;
+    background-size: contain;    
+    
+}
+
+.heading {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 60px;
+    text-shadow: 1px 1px 1px black;
+    text-align: center;
+}
+
+.body {
+    color: rgb(255, 255, 255);
+    font-family: Arial, Helvetica, sans-serif;
+    text-shadow: 1px 1px 1px black;
+    font-size: 25px;
+    
+}
+
+.link {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 17px;
+    text-shadow: 1px 1px 1px black;
+    text-align: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.sub {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    text-shadow: 1px 1px 1px black;
+    text-align: center;
+}
+
+.list {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-shadow: 1px 1px 1px black;
+    font-size: larger;
+}
+
+.logoimage {
+    position: absolute;
+    top: 8px; 
+    right: 8px;
+}
+
+.center {
+    text-align: center;
+}
